@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" stylesheets="@../css/styles.css" xmlns="http://javafx.com" xmlns:fx="http://javafx.com" fx:controller="main.java.edu.ingsoft.colegio.gotitas.controller.DashboardController">
+   <children>
+      <GridPane alignment="CENTER" prefHeight="513.0" prefWidth="610.0" stylesheets="@../css/login-view.css">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="600.0" minWidth="10.0" prefWidth="600.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="294.0" minWidth="0.0" prefWidth="0.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="503.0" minHeight="10.0" prefHeight="503.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Pane prefHeight="511.0" prefWidth="611.0">
+               <children>
+                  <!-- Sincronizado: fx:id="tvEstudiante" -->
+                  <TableView fx:id="tvEstudiante" layoutX="9.0" layoutY="14.0" prefHeight="486.0" prefWidth="582.0" stylesheets="@../css/dashboard-view.css">
+                    <columns>
+                      <TableColumn fx:id="tvColumnIdEstudiante" prefWidth="75.0" text="id estudiante" />
+                      <TableColumn fx:id="tvColumnNombreEstudiante" prefWidth="75.0" text="nombre" />
+                      <TableColumn fx:id="tvColumnApellidoEstudiante" prefWidth="75.0" text="apellido" />
+                      <TableColumn fx:id="tvColumnCorreo" prefWidth="75.0" text=" correo electronico" />
+                      <TableColumn fx:id="tvColumnSeccion" prefWidth="75.0" text="seccion" />
+                      <TableColumn fx:id="tvColumnCurso" prefWidth="75.0" text="curso" />
+                      <TableColumn fx:id="tvColumnNombreDocente" prefWidth="75.0" text="nombre docente " />
+                      <TableColumn fx:id="tvColumnApellidoDocente" prefWidth="75.0" text="apellido docente " />
+                    </columns>
+                  </TableView>
+               </children>
+            </Pane>
+         </children>
+         <styleClass>
+         </styleClass>
+      </GridPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,128 @@
+/*
+ * Hoja de estilos unificada para interfaz JavaFX
+ * Estilo: Tarjeta Blanca Sólida sin Redondear
+ */
+
+/* --- Fondo General (Gradiente Púrpura/Violeta) --- */
+.background {
+    -fx-background-color: linear-gradient(to bottom right, #10002b, #240046, #3c096c, #5a189a);
+}
+
+/* --- Tarjeta Central (Blanca Sólida y Esquinas Rectas) --- */
+.card-pane {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0px;
+    -fx-border-width: 0px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 20, 0, 0, 8);
+}
+
+/* --- Encabezado con imagen de fondo (login / registro) --- */
+.header-image {
+    -fx-background-color: #5a189a;
+}
+
+/* --- Contenedor de formulario (agrupa labels + campos ordenadamente) --- */
+.form-container {
+    -fx-spacing: 4px;
+}
+
+/* Mensaje de error debajo de un campo */
+.label-error {
+    -fx-text-fill: #d00000;
+    -fx-font-size: 11px;
+}
+
+/* --- Etiquetas de Texto (Labels Secundarios Negros) --- */
+.label {
+    -fx-text-fill: #000000;
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.label-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 60px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.label-primary {
+    -fx-text-fill: #000000;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+/* Enlaces interactivos */
+.label-link {
+    -fx-text-fill: #5a189a;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.label-link:hover {
+    -fx-text-fill: #7b2cbf;
+    -fx-underline: true;
+}
+
+/* --- Campos de Texto (Sin Redondear) --- */
+.text-field, .password-field {
+    -fx-background-color: #f4f4f6;
+    -fx-background-radius: 18px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 18px;
+    -fx-padding: 10px 14px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #10002b;
+    -fx-prompt-text-fill: #7b2cbf;
+}
+
+/* Estado enfocado al hacer clic */
+.text-field:focused, .password-field:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #7b2cbf;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(123, 44, 191, 0.2), 6, 0, 0, 0);
+}
+
+/* --- Botones Generales (Sin Redondear) --- */
+.button {
+    -fx-background-color: #7b2cbf;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 18px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #9d4edd;
+    -fx-effect: dropshadow(three-pass-box, rgba(157, 78, 221, 0.4), 12, 0, 0, 4);
+}
+
+.button:pressed {
+    -fx-background-color: #5a189a;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* --- Botones Secundarios o de Redes Sociales --- */
+.button-social {
+    -fx-background-color: #f4f4f6;
+    -fx-background-radius: 0px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 16px;
+}
+
+.button-social:hover {
+    -fx-background-color: #e2e8f0;
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+
+.button-social:pressed {
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
+}
