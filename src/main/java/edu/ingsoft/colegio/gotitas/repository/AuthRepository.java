@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import main.java.edu.ingsoft.colegio.gotitas.config.DataBaseConnection;
-import java.sql.SQLException;
 import java.util.UUID;
 import main.java.edu.ingsoft.colegio.gotitas.dto.request.LoginRequest;
 import main.java.edu.ingsoft.colegio.gotitas.dto.request.RegisterRequest;
@@ -19,10 +18,9 @@ public class AuthRepository {
     public AuthRepository() {
     }
 
-    // Divide y vencerás: un metodo debe ser engargado de realizar unicamente una tarea específica
-    // el nombre de ese método debe ser modular, directo
     public LoginResponse findUserByEmail(LoginRequest loginRequest) throws Exception {
-        String sql = "select d.nombre, d.apellido, u.contrasena_hash from usuarios as u right join docentes as d on d.id_docente = u.id_docente where email = ?;";
+        // CORREGIDO: u.id_docente cambiado a u.id_docentes para coincidir con la base de datos
+        String sql = "select d.nombre, d.apellido, u.contrasena_hash from usuarios as u right join docentes as d on d.id_docente = u.id_docentes where email = ?;";
 
         try (PreparedStatement pstm = DataBaseConnection.getConnectionDataBase().prepareStatement(sql)) {
             pstm.setString(1, loginRequest.getEmail());
@@ -33,14 +31,12 @@ public class AuthRepository {
             }
 
         } catch (Exception e) {
-            System.out.println("Error al encontrar el Email" + e.getMessage());
+            System.out.println("Error al encontrar el Email: " + e.getMessage());
         }
 
         return null;
-
     }
 
-    // Verifica si ya existe un usuario registrado con ese correo
     public boolean existsByEmail(String email) throws Exception {
         String sql = "select 1 from usuarios where email = ?;";
 
@@ -53,62 +49,46 @@ public class AuthRepository {
         }
     }
 
-    // Inserta el docente y su usuario (correo + contraseña ya hasheada)
     public void saveUser(RegisterRequest registerRequest, String contrasenaHash) throws Exception {
         this.idDocente = UUID.randomUUID().toString();
         this.email = registerRequest.getEmail();
-        String sqlDocente = "insert into docentes (id_docente, nombre, apellido,correo_electronico) values (?, ?, ?, ?);";
-        String sqlUsuario = "insert into usuarios (id_usuario, id_docente, contrasena_hash, id_rol, email) values (?, ?,?,?,?);";
-        String getDocente = "select * from docentes";
+        
+        String sqlDocente = "insert into docentes (id_docente, nombre, apellido, correo_electronico) values (?, ?, ?, ?);";
+        // CORREGIDO: id_docente cambiado a id_docentes en la tabla usuarios
+        String sqlUsuario = "insert into usuarios (id_usuario, id_docentes, contrasena_hash, id_rol, email) values (?, ?, ?, ?, ?);";
 
         Connection conn = DataBaseConnection.getConnectionDataBase();
-        // boolean autoCommitOriginal = conn.getAutoCommit();
+        boolean autoCommitOriginal = conn.getAutoCommit();
 
         try {
-            //conn.setAutoCommit(false);
+            conn.setAutoCommit(false); // Activamos la transacción para asegurar consistencia
 
+            // 1. Insertar Docente
             try (PreparedStatement pstmDocente = conn.prepareStatement(sqlDocente)) {
-                
                 pstmDocente.setString(1, idDocente);
                 pstmDocente.setString(2, registerRequest.getNombre());
                 pstmDocente.setString(3, registerRequest.getApellido());
                 pstmDocente.setString(4, email);
                 pstmDocente.execute();
-
-                try (PreparedStatement pstmGetDocente = conn.prepareStatement(getDocente)) {
-                  //  String idDocente;
-               
-                   
-                        try (PreparedStatement pstmUsuario = conn.prepareStatement(sqlUsuario)) {
-                            pstmUsuario.setString(1, UUID.randomUUID().toString());
-                            pstmUsuario.setString(2, idDocente);
-                            pstmUsuario.setString(3, contrasenaHash);
-                            pstmUsuario.setInt(4, 1);
-                            pstmUsuario.setString(5, email);
-                            pstmUsuario.execute();
-                        }
-                    
-                }
-
-                //   ResultSet rs = pstmDocente.executeQuery();
-
-                /*
-                    if (rs.next()) {
-                        idDocente = rs.getString("id_docente");
-                    } else {
-                        throw new RuntimeException("No se pudo obtener el id del docente generado");
-                    }
-               
-                 */
             }
-            // conn.commit();
+
+            // 2. Insertar Usuario asociado
+            try (PreparedStatement pstmUsuario = conn.prepareStatement(sqlUsuario)) {
+                pstmUsuario.setString(1, UUID.randomUUID().toString());
+                pstmUsuario.setString(2, idDocente);
+                pstmUsuario.setString(3, contrasenaHash);
+                pstmUsuario.setInt(4, 1);
+                pstmUsuario.setString(5, email);
+                pstmUsuario.execute();
+            }
+
+            conn.commit(); // Confirmamos los cambios si todo sale bien
 
         } catch (Exception e) {
-            //  conn.rollback();
-            throw new RuntimeException("Error al registrar el usuario: " + e.getMessage() + "rs: " + this.idDocente);
+            conn.rollback(); // Revertimos si ocurre algún fallo
+            throw new RuntimeException("Error al registrar el usuario: " + e.getMessage());
         } finally {
-            //  conn.setAutoCommit(autoCommitOriginal);
+            conn.setAutoCommit(autoCommitOriginal);
         }
     }
-
 }
