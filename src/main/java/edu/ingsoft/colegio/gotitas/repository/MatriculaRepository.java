@@ -13,12 +13,12 @@ public ObservableList<Matricula> findAll() throws Exception {
     ObservableList<Matricula> lista = FXCollections.observableArrayList();
     
     // Cambiamos CONCAT(e.nombres, ' ', e.apellidos) por e.nombre (o el nombre real de tu columna)
-    String sql = "SELECT m.id_matricula, m.id_seccion, m.id_estudiante, " +
+   String sql = "SELECT m.id_matricula, m.id_seccion, m.id_estudiante, " +
                  "e.nombre AS nombreEstudiante, " +
                  "s.nombre_seccion AS nombreSeccion " +
                  "FROM matriculas m " +
-                 "INNER JOIN estudiantes e ON m.id_estudiante = e.id_estudiante " +
-                 "INNER JOIN secciones s ON m.id_seccion = s.id_seccion";
+                 "LEFT JOIN estudiantes e ON m.id_estudiante = e.id_estudiante " +
+                 "LEFT JOIN secciones s ON m.id_seccion = s.id_seccion";
 
     try (Connection conn = DataBaseConnection.getConnectionDataBase();
          PreparedStatement pstm = conn.prepareStatement(sql);
