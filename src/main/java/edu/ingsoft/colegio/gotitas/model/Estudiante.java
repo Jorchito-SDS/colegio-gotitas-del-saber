@@ -21,6 +21,9 @@ public class Estudiante {
         this.nombreDocente = nombreDocente;
         this.apellidoDocente = apellidoDocente;
     }
+   
+     public Estudiante() {
+    }
 
     public String getIdEstudiante() {
         return idEstudiante;

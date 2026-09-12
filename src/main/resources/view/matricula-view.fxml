@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15.0" style="-fx-padding: 20; -fx-background-color: #0d1322;" stylesheets="@../css/global-styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.edu.ingsoft.colegio.gotitas.controller.MatriculaController">
+      
+    <Label style="-fx-font-size: 20px;" text="Gestión de Matrículas" />
+
+    <TableView fx:id="tblMatriculas" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colIdMatricula" prefWidth="150" text="ID Matrícula" />
+            <TableColumn fx:id="colEstudiante" prefWidth="250" text="Estudiante" />
+            <TableColumn fx:id="colSeccion" prefWidth="180" text="Sección" />
+        </columns>
+    </TableView>
+</VBox>

@@ -1,63 +1,96 @@
 package main.java.edu.ingsoft.colegio.gotitas.repository;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import main.java.edu.ingsoft.colegio.gotitas.config.DataBaseConnection;
 import main.java.edu.ingsoft.colegio.gotitas.model.Estudiante;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import javafx.collections.FXCollections;
-import main.java.edu.ingsoft.colegio.gotitas.config.DataBaseConnection;
 
 public class EstudianteRepository {
 
+    // CONSULTA CON LEFT JOIN PARA VER ESTUDIANTES AUN SIN MATRÍCULA
     public ObservableList<Estudiante> findAll() throws Exception {
-       String sql = "SELECT \n" +
-"    e.id_estudiante,\n" +
-"    e.nombre,\n" +
-"    e.apellido,\n" +
-"    e.correo_electronico,\n" +
-"    s.nombre_seccion,\n" +
-"    c.nombre_curso,\n" +
-"    d.nombre,\n" +
-"    d.apellido\n" +
-"FROM asignacion_cursos AS ac\n" +
-"INNER JOIN matriculas AS m \n" +
-"    ON m.id_matricula = ac.id_matricula\n" +
-"INNER JOIN secciones AS s \n" +
-"    ON s.id_seccion = ac.id_seccion\n" +
-"INNER JOIN cursos AS c \n" +
-"    ON c.id_curso = ac.id_curso\n" +
-"INNER JOIN docentes AS d \n" +
-"    ON d.id_docente = ac.id_docente\n" +
-"INNER JOIN estudiantes AS e \n" +
-"    ON e.id_estudiante = m.id_estudiante;";
-        
-        
-        
+        String sql = "SELECT " +
+                     "    e.id_estudiante, " +
+                     "    e.nombre AS nombre_estudiante, " +
+                     "    e.apellido AS apellido_estudiante, " +
+                     "    e.correo_electronico, " +
+                     "    IFNULL(s.nombre_seccion, 'Sin asignación') AS nombre_seccion, " +
+                     "    IFNULL(c.nombre_cursos, 'Sin asignación') AS nombre_curso, " +
+                     "    IFNULL(d.nombre, 'Sin asignación') AS nombre_docente, " +
+                     "    IFNULL(d.apellido, '') AS apellido_docente " +
+                     "FROM estudiantes AS e " +
+                     "LEFT JOIN matriculas AS m ON m.id_estudiante = e.id_estudiante " +
+                     "LEFT JOIN asignacion_cursos AS ac ON ac.id_matricula = m.id_matricula " +
+                     "LEFT JOIN secciones AS s ON s.id_seccion = ac.id_seccion " +
+                     "LEFT JOIN cursos AS c ON c.id_cursos = ac.id_curso " +
+                     "LEFT JOIN docentes AS d ON d.id_docente = ac.id_docente " +
+                     "ORDER BY e.id_estudiante DESC;";
 
-        try (PreparedStatement pstm = DataBaseConnection.getConnectionDataBase().prepareStatement(sql)) {
-            
-            ResultSet rs = pstm.executeQuery();
-            ObservableList<Estudiante> studentList = FXCollections.observableArrayList();
-            
+        ObservableList<Estudiante> list = FXCollections.observableArrayList();
+
+        try (PreparedStatement pstm = DataBaseConnection.getConnectionDataBase().prepareStatement(sql);
+             ResultSet rs = pstm.executeQuery()) {
+
             while (rs.next()) {
-                studentList.add(new Estudiante(
+                list.add(new Estudiante(
                         rs.getString("id_estudiante"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido"),
+                        rs.getString("nombre_estudiante"),
+                        rs.getString("apellido_estudiante"),
                         rs.getString("correo_electronico"),
                         rs.getString("nombre_seccion"),
                         rs.getString("nombre_curso"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido")
+                        rs.getString("nombre_docente"),
+                        rs.getString("apellido_docente")
                 ));
-
             }
-            return studentList;
+            return list;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error en la consulta: " + e.getMessage());
+            throw new RuntimeException("Error al listar estudiantes: " + e.getMessage());
         }
     }
 
+    public boolean save(String idEstudiante, String idCiudad, String nombre, String apellido, String correo, String fechaNacimiento) throws Exception {
+        String sql = "INSERT INTO estudiantes (id_estudiante, id_ciudad, nombre, apellido, correo_electronico, fecha_nacimiento) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstm = DataBaseConnection.getConnectionDataBase().prepareStatement(sql)) {
+            pstm.setString(1, idEstudiante);
+            pstm.setString(2, idCiudad);
+            pstm.setString(3, nombre);
+            pstm.setString(4, apellido);
+            pstm.setString(5, correo);
+            pstm.setString(6, fechaNacimiento);
+            return pstm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al guardar estudiante: " + e.getMessage());
+        }
+    }
+
+    public boolean update(String idEstudiante, String idCiudad, String nombre, String apellido, String correo, String fechaNacimiento) throws Exception {
+        String sql = "UPDATE estudiantes SET id_ciudad=?, nombre=?, apellido=?, correo_electronico=?, fecha_nacimiento=? WHERE id_estudiante=?";
+        try (PreparedStatement pstm = DataBaseConnection.getConnectionDataBase().prepareStatement(sql)) {
+            pstm.setString(1, idCiudad);
+            pstm.setString(2, nombre);
+            pstm.setString(3, apellido);
+            pstm.setString(4, correo);
+            pstm.setString(5, fechaNacimiento);
+            pstm.setString(6, idEstudiante);
+            return pstm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar estudiante: " + e.getMessage());
+        }
+    }
+
+    public boolean delete(String idEstudiante) throws Exception {
+        String sql = "DELETE FROM estudiantes WHERE id_estudiante=?";
+        try (PreparedStatement pstm = DataBaseConnection.getConnectionDataBase().prepareStatement(sql)) {
+            pstm.setString(1, idEstudiante);
+            return pstm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar estudiante: " + e.getMessage());
+        }
+    }
 }

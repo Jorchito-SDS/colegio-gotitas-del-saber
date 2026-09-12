@@ -1,0 +1,87 @@
+/* global-styles.css - High-Tech Futuristic Cyberpunk Theme */
+
+.root {
+    -fx-base: #060913;
+    -fx-background-color: #060913;
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+/* Paneles y Contenedores (Selectores de tipo en JavaFX sin punto y sin !important) */
+pane, anchor-pane, stack-pane, vbox, hbox, grid-pane, border-pane {
+    -fx-background-color: #0d1322;
+    -fx-background-radius: 12px;
+    -fx-border-color: #1e293b;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+}
+
+/* Etiquetas */
+.label {
+    -fx-text-fill: #f1f5f9;
+}
+
+/* Campos de texto y selección con visibilidad garantizada */
+.text-field, .password-field, .combo-box {
+    -fx-background-color: #162032;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #64748b;
+    -fx-border-color: #3b82f6;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px;
+}
+
+.text-field:focused, .password-field:focused, .combo-box:focused {
+    -fx-border-color: #00ffff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 255, 255, 0.4), 10, 0, 0, 0);
+}
+
+/* Botones con efectos de brillo Neón */
+.button {
+    -fx-background-color: linear-gradient(to right, #0284c7, #7c3aed);
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 18px;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to right, #0ea5e9, #8b5cf6);
+    -fx-effect: dropshadow(three-pass-box, rgba(14, 165, 233, 0.7), 12, 0, 0, 0);
+}
+
+.button:pressed {
+    -fx-background-color: #0369a1;
+}
+
+/* Tablas estilizadas tipo consola */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #1e293b;
+    -fx-border-radius: 8px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #162032;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-text-fill: #38bdf8;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: #0d1322;
+    -fx-border-color: #1e293b;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #1e3a8a;
+}
+
+.table-view .cell {
+    -fx-text-fill: #f8fafc;
+}
